@@ -1,0 +1,25 @@
+%ifdef      ${APPLE}
+
+%define     ENTRYPOINT      _main
+%define     SYSCALL_WRITE   0x2000004
+%define     SYSCALL_EXIT    0x2000001
+
+%elif       ${UNIX}
+
+%define     ENTRYPOINT      _start
+%define     SYSCALL_WRITE   1
+%define     SYSCALL_EXIT    60
+
+%elif       ${WIN32}
+
+%define     ENTRYPOINT      ..start
+%define     SYSCALL_WRITE
+%define     SYSCALL_EXIT
+
+%endif
+
+%macro      __exit__        0
+            mov             rax, SYSCALL_EXIT
+            mov             rdi, 0
+            syscall
+%endmacro
